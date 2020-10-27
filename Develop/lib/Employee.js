@@ -8,7 +8,9 @@ class Employee {
   }
 
     // methods
-    getName();
+    getName() {
+        return this.name;
+    };
     getId();
     getEmail();
     getRole();
