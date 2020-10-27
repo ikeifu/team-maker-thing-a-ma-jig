@@ -33,7 +33,7 @@ const initQuestions = [
   },
   {
     type: "input",
-    name: `ID number`,
+    name: `ID`,
     message: `what's your ID number`,
     validate: function (answer) {
       if (answer.length < 1) {
@@ -70,7 +70,7 @@ const roleQuestions = [
 const engQuestions = [
   {
     type: "input",
-    name: "Github username",
+    name: "github",
     message: "what is your Github Username?",
     validate: function (answer) {
       if (answer.length < 1) {
@@ -84,7 +84,7 @@ const engQuestions = [
 const managerQuestions = [
   {
     type: "input",
-    name: "manager",
+    name: "office",
     message: "what is your office number",
     validate: function (answer) {
       if (answer === NaN) {
@@ -124,33 +124,74 @@ const finalQuestions = [
 
 // helper functions
 
-function engQuestion() {
-  inquirer.prompt(engQuestions).then((answer) => {
-    const bop = answer;
-    console.log(bop);
+function init() {
+  inquirer.prompt(initQuestions).then((mainAnswers) => {
+    roleBasedQuestions(mainAnswers);
+  });
+}
+
+function roleBasedQuestions(mainAnswers) {
+  inquirer.prompt(roleQuestions).then((e) => {
+    switch (e.role) {
+      case "Intern":
+        console.log("test" + mainAnswers.name);
+        internQuestion(mainAnswers);
+        break;
+      case "Engineer":
+        engQuestion(mainAnswers);
+        break;
+      case "Manager":
+        managerQuestion(mainAnswers);
+        break;
+    }
+  });
+}
+
+function engQuestion(mainAnswers) {
+  inquirer.prompt(engQuestions).then((answers) => {
+    const engUser = answers.github;
+    const engineer = new Engineer(
+      mainAnswers.name,
+      mainAnswers.ID,
+      mainAnswers.email,
+      engUser
+    );
+    employees.push(engineer);
     lastQuestion();
   });
 }
 
-function managerQuestion() {
-  inquirer.prompt(managerQuestions).then((answer) => {
-    const boop = answer;
-    console.log(boop);
+function managerQuestion(mainAnswers) {
+  inquirer.prompt(managerQuestions).then((answers) => {
+    const managerUser = answers.office;
+    const manager = new Manager(
+      mainAnswers.name,
+      mainAnswers.ID,
+      mainAnswers.email,
+      managerUser
+    );
+    employees.push(manager);
     lastQuestion();
   });
 }
 
-function internQuestion() {
-  inquirer.prompt(internQuestions).then((answer) => {
-    const beep = answer;
-    console.log(beep);
+function internQuestion(mainAnswers) {
+  inquirer.prompt(internQuestions).then((answers) => {
+    const internUser = answers.school;
+    const intern = new Intern(
+      mainAnswers.name,
+      mainAnswers.ID,
+      mainAnswers.email,
+      internUser
+    );
+    employees.push(intern);
     lastQuestion();
   });
 }
 
 function lastQuestion() {
-  inquirer.prompt(finalQuestions).then((answer) => {
-    const userInput = answer.last;
+  inquirer.prompt(finalQuestions).then((answers) => {
+    const userInput = answers.last;
     if (userInput === `yes`) {
       init();
     } else {
@@ -161,28 +202,6 @@ function lastQuestion() {
         }
       });
       return;
-    }
-  });
-}
-
-function init() {
-  inquirer.prompt(initQuestions).then((answer) => {
-    roleBasedQuestions(answer);
-  });
-}
-
-function roleBasedQuestions() {
-  inquirer.prompt(roleQuestions).then((e) => {
-    switch (e.role) {
-      case "Intern":
-        internQuestion();
-        break;
-      case "Engineer":
-        engQuestion();
-        break;
-      case "Manager":
-        managerQuestion();
-        break;
     }
   });
 }
