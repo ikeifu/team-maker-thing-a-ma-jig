@@ -7,10 +7,24 @@ class Manager extends Employee {
     super(name, id, email);
   }
 
+  getName() {
+    return this.name;
+  }
+  getId() {
+    return this.id;
+  }
+  getEmail() {
+    return this.email;
+  }
   getRole() {
-    //   hard code to return manager always
+    return "Engineer";
+  }
+  getOfficeNumber() {
+    return this.officeNumber;
   }
 }
 
 //
 module.exports = Manager;
+
+// employees are stored as objects in an array

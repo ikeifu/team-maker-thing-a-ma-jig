@@ -9,7 +9,6 @@ class Employee {
 
   // methods
   getName() {
-    console.log();
     return this.name;
   }
   getId() {

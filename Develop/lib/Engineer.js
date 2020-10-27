@@ -7,12 +7,20 @@ class Engineer extends Employee {
     super(name, id, email);
   }
 
-  getRole() {
-    //   hard code to return engineer always
+  getName() {
+    return this.name;
   }
-
+  getId() {
+    return this.id;
+  }
+  getEmail() {
+    return this.email;
+  }
+  getRole() {
+    return "Engineer";
+  }
   getGithub() {
-    //   code here
+    return this.github;
   }
 }
 
