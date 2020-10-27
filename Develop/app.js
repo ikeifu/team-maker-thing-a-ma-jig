@@ -127,9 +127,7 @@ const finalQuestion = [
 
 // helper functions
 
-async function init() {
-  let moreEmployees = true;
-  while (moreEmployees === true) {}
+function init() {
   inquirer.prompt(initQuestion);
 
   function role() {
