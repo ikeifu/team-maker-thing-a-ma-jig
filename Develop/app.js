@@ -9,6 +9,7 @@ const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
+const { error } = require("console");
 
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
@@ -56,7 +57,7 @@ const initQuestions = [
 
 // then the role question will be asked
 // depending on the answer, only of the following questions will be asked
-const roleQuestion = [
+const roleQuestions = [
   {
     type: "list",
     name: "role",
@@ -66,7 +67,7 @@ const roleQuestion = [
 ];
 
 // if the user picks Engineer, this question is asked
-const engQuestion = [
+const engQuestions = [
   {
     type: "input",
     name: "Github username",
@@ -80,21 +81,21 @@ const engQuestion = [
   },
 ];
 // if the user picks manager, this question is asked
-const managerQuestion = [
+const managerQuestions = [
   {
     type: "input",
     name: "manager",
-    message: "what is your office phone number",
+    message: "what is your office number",
     validate: function (answer) {
-      if (answer.length < 1) {
-        return "You must enter a valid phone number";
+      if (answer === NaN) {
+        return "You must enter a valid number";
       }
       return true;
     },
   },
 ];
 // if the user picks intern, this question is asked
-const internQuestion = [
+const internQuestions = [
   {
     type: "input",
     name: "school",
@@ -108,18 +109,14 @@ const internQuestion = [
   },
 ];
 // after all the questions are asked, the final question is asked
-const finalQuestion = [
+const finalQuestions = [
   {
     type: "list",
-    name: "last question",
+    name: "last",
     message: `Would you like to add any other team members`,
     choices: [`yes`, `no`],
   },
 ];
-// if no, render func
-// if yes, loop
-
-// have helper functions for each class
 
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
@@ -127,45 +124,76 @@ const finalQuestion = [
 
 // helper functions
 
-function init() {
-  inquirer.prompt(initQuestion);
-
-  function role() {
-    inquirer.prompt(roleQuestion);
-  }
-
-  function engQuestions() {
-    inquirer.prompt(engQuestion);
-  }
-
-  function managerQuestions() {
-    inquirer.prompt(managerQuestion);
-  }
-
-  function internQuestions() {
-    inquirer.prompt(internQuestion);
-  }
-
-  function lastQuestion() {
-    inquirer.prompt(finalQuestion);
-  }
+function engQuestion() {
+  inquirer.prompt(engQuestions).then((answer) => {
+    const bop = answer;
+    console.log(bop);
+    lastQuestion();
+  });
 }
 
-// write questions out
-// save the userInput
-// write helper fucntions
-// .thens for inquierer prompts
-// write init func
+function managerQuestion() {
+  inquirer.prompt(managerQuestions).then((answer) => {
+    const boop = answer;
+    console.log(boop);
+    lastQuestion();
+  });
+}
+
+function internQuestion() {
+  inquirer.prompt(internQuestions).then((answer) => {
+    const beep = answer;
+    console.log(beep);
+    lastQuestion();
+  });
+}
+
+function lastQuestion() {
+  inquirer.prompt(finalQuestions).then((answer) => {
+    const userInput = answer.last;
+    if (userInput === `yes`) {
+      init();
+    } else {
+      let html = render(employees);
+      fs.writeFile("output/team.html", html, (err) => {
+        if (err) {
+          return "error";
+        }
+      });
+      return;
+    }
+  });
+}
+
+function init() {
+  inquirer.prompt(initQuestions).then((answer) => {
+    roleBasedQuestions(answer);
+  });
+}
+
+function roleBasedQuestions() {
+  inquirer.prompt(roleQuestions).then((e) => {
+    switch (e.role) {
+      case "Intern":
+        internQuestion();
+        break;
+      case "Engineer":
+        engQuestion();
+        break;
+      case "Manager":
+        managerQuestion();
+        break;
+    }
+  });
+}
+
+init();
 
 // After you have your html, you're now ready to create an HTML file using the HTML
 // returned from the `render` function. Now write it to a file named `team.html` in the
 // `output` folder. You can use the variable `outputPath` above target this location.
 // Hint: you may need to check if the `output` folder exists and create it if it
 // does not.
-
-// HINT: each employee type (manager, engineer, or intern) has slightly different
-// information; write your code to ask different questions via inquirer depending on
-// employee type.
 
 // HINT: make sure to build out your classes first! Remember that your Manager, Engineer,
 // and Intern classes should all extend from a class named Employee; see the directions
