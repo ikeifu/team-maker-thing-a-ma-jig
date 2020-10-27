@@ -13,7 +13,12 @@ const render = require("./lib/htmlRenderer");
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
 
-const questions = [
+// empty employees array
+// employees from each session will be added in
+const employees = [];
+
+// first the three general questions will be asked (name, id#, email)
+const initQuestions = [
   {
     type: "input",
     name: "name",
@@ -49,6 +54,8 @@ const questions = [
   },
 ];
 
+// then the role question will be asked
+// depending on the answer, only of the following questions will be asked
 const roleQuestion = [
   {
     type: "list",
@@ -58,7 +65,8 @@ const roleQuestion = [
   },
 ];
 
-const engQuestions = [
+// if the user picks Engineer, this question is asked
+const engQuestion = [
   {
     type: "input",
     name: "Github username",
@@ -71,8 +79,8 @@ const engQuestions = [
     },
   },
 ];
-
-const managerQuestions = [
+// if the user picks manager, this question is asked
+const managerQuestion = [
   {
     type: "input",
     name: "manager",
@@ -85,8 +93,8 @@ const managerQuestions = [
     },
   },
 ];
-
-const internQuestions = [
+// if the user picks intern, this question is asked
+const internQuestion = [
   {
     type: "input",
     name: "school",
@@ -99,8 +107,8 @@ const internQuestions = [
     },
   },
 ];
-
-const lastQuestion = [
+// after all the questions are asked, the final question is asked
+const finalQuestion = [
   {
     type: "list",
     name: "last question",
@@ -108,14 +116,8 @@ const lastQuestion = [
     choices: [`yes`, `no`],
   },
 ];
-
-// whats ur name
-// whats ur role
-//  if eng -> whatsur gh
-//  if int -> whatsur school
-//  if manager -> whatsur office number
-// whats your id
-// whats your email
+// if no, render func
+// if yes, loop
 
 // have helper functions for each class
 
@@ -125,23 +127,30 @@ const lastQuestion = [
 
 // helper functions
 
-function init() {
-  inquirer.prompt([roleQuestion]);
-}
+async function init() {
+  let moreEmployees = true;
+  while (moreEmployees === true) {}
+  inquirer.prompt(initQuestion);
 
-function engQuestions() {
-  inquirer.prompt([engQuestions]);
-}
-function managerQuestions() {
-  inquirer.prompt([managerQuestions]);
-}
+  function role() {
+    inquirer.prompt(roleQuestion);
+  }
 
-function internQuestions() {
-  inquirer.prompt([internQuestions]);
-}
+  function engQuestions() {
+    inquirer.prompt(engQuestion);
+  }
 
-function lastQuestion() {
-  inquirer.prompt([lastQuestion]);
+  function managerQuestions() {
+    inquirer.prompt(managerQuestion);
+  }
+
+  function internQuestions() {
+    inquirer.prompt(internQuestion);
+  }
+
+  function lastQuestion() {
+    inquirer.prompt(finalQuestion);
+  }
 }
 
 // write questions out
